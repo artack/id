@@ -20,18 +20,11 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class ArtackIdBundle extends AbstractBundle {
 
-    public const string CONFIG_DOCTRINE_TYPE_DIRECTORIES_KEY = 'doctrine_type_directories';
     public const string PARAMETER_DOCTRINE_TYPE_DIRECTORIES_KEY = 'artack.id.doctrine_type_directories';
 
-    public const string CONFIG_SERIALIZER_KEY = 'serializer';
-    public const string CONFIG_SERIALIZER_ENABLE_KEY = 'enable';
-    public const string SERIALIZER_ENABLE_KEY = 'serializer';
-    public const string SERIALIZER_ENABLE_OPTION_KEY = 'enable';
-
-    public const string PLATFORM_MARIADB1011_ENABLE_KEY = 'platform_mariadb1011';
-    public const string PLATFORM_MARIADB1011_ENABLE_OPTION_KEY = 'enable';
-
-    public const string PARAMETER_SERIALIZER_ENABLE_KEY = 'artack.id.serializer.enable';
+    private const string CONFIG_DOCTRINE_TYPE_DIRECTORIES_KEY = 'doctrine_type_directories';
+    private const string CONFIG_SERIALIZER = 'serializer';
+    private const string CONFIG_PLATFORM_MARIADB1011 = 'platform_mariadb1011';
 
     #[Override]
     public function build(ContainerBuilder $container): void
@@ -45,9 +38,7 @@ final class ArtackIdBundle extends AbstractBundle {
     {
         $builder->setParameter(self::PARAMETER_DOCTRINE_TYPE_DIRECTORIES_KEY, $config[self::CONFIG_DOCTRINE_TYPE_DIRECTORIES_KEY]);
 
-//        $builder->setParameter(self::PARAMETER_SERIALIZER_ENABLE_KEY, $serializerEnabled);
-
-        $serializerEnabled = $config[self::CONFIG_SERIALIZER_KEY][self::CONFIG_SERIALIZER_ENABLE_KEY] ?? false;
+        $serializerEnabled = $config[self::CONFIG_SERIALIZER]['enabled'] ?? false;
         if ($serializerEnabled) {
             if (!interface_exists(NormalizerInterface::class)) {
                 throw new \LogicException('Unable register the Denormalizers and Normalizers as the Symfony Serializer Component is not installed. Try running "composer require symfony/serializer" or set serializer.enable to false.');
@@ -62,7 +53,7 @@ final class ArtackIdBundle extends AbstractBundle {
                 ->tag('serializer.normalizer');
         }
 
-        $platformMariadb1011Enabled = $config[self::PLATFORM_MARIADB1011_ENABLE_KEY][self::PLATFORM_MARIADB1011_ENABLE_OPTION_KEY] ?? false;
+        $platformMariadb1011Enabled = $config[self::CONFIG_PLATFORM_MARIADB1011]['enabled'] ?? false;
         if ($platformMariadb1011Enabled) {
             $services = $container->services();
 
@@ -84,23 +75,8 @@ final class ArtackIdBundle extends AbstractBundle {
                     ->defaultValue([])
                     ->prototype('variable')->end()
                 ->end()
-                ->arrayNode(self::PLATFORM_MARIADB1011_ENABLE_KEY)
-                    ->addDefaultsIfNotSet()
-                        ->children()
-                            ->booleanNode(self::PLATFORM_MARIADB1011_ENABLE_OPTION_KEY)
-                            ->defaultFalse()
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode(self::SERIALIZER_ENABLE_KEY)
-                    ->addDefaultsIfNotSet()
-                        ->children()
-                            ->booleanNode(self::SERIALIZER_ENABLE_OPTION_KEY)
-                            ->info('Enable or disable the serializer components')
-                            ->defaultFalse()
-                        ->end()
-                    ->end()
-                ->end()
+                ->arrayNode(self::CONFIG_PLATFORM_MARIADB1011)->canBeEnabled()->end()
+                ->arrayNode(self::CONFIG_SERIALIZER)->canBeEnabled()->end()
             ->end()
         ;
     }
