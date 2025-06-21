@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\DependencyInjection\CompilerPass;
+namespace Artack\Id\DependencyInjection\CompilerPass;
 
+use Artack\Id\ArtackIdBundle;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use League\ConstructFinder\ConstructFinder;
@@ -17,7 +18,7 @@ use function array_key_exists;
 
 final readonly class DoctrineTypeRegisterCompilerPass implements CompilerPassInterface
 {
-    private const string TYPE_DEFINITION_PARAMETER = 'doctrine.dbal.connection_factory.types';
+    private const string DOCTRINE_DBAL_TYPE_DEFINITION_PARAMETER = 'doctrine.dbal.connection_factory.types';
     private const string TYPE_NAME = 'NAME';
 
     #[Override]
@@ -26,23 +27,29 @@ final readonly class DoctrineTypeRegisterCompilerPass implements CompilerPassInt
         /**
          * @var array<string, array{class: class-string}> $typeDefinitions
          */
-        $typeDefinitions = $container->getParameter(self::TYPE_DEFINITION_PARAMETER);
+        $typeDefinitions = $container->getParameter(self::DOCTRINE_DBAL_TYPE_DEFINITION_PARAMETER);
 
-        $doctrineTypeDirectory = __DIR__.'/../../Doctrine/IdType';
-        $types = $this->findTypesInDirectory($doctrineTypeDirectory);
+        /**
+         * @var array<int, string>
+         */
+        $doctrineTypeDirectories = $container->getParameter(ArtackIdBundle::PARAMETER_DOCTRINE_TYPE_DIRECTORIES_KEY);
 
-        foreach ($types as $type) {
-            $name = $type['name'];
-            $class = $type['class'];
+        foreach ($doctrineTypeDirectories as $doctrineTypeDirectory) {
+            $types = $this->findTypesInDirectory($doctrineTypeDirectory);
 
-            if (array_key_exists($name, $typeDefinitions)) {
-                continue;
+            foreach ($types as $type) {
+                $name = $type['name'];
+                $class = $type['class'];
+
+                if (array_key_exists($name, $typeDefinitions)) {
+                    continue;
+                }
+
+                $typeDefinitions[$name] = ['class' => $class];
             }
-
-            $typeDefinitions[$name] = ['class' => $class];
         }
 
-        $container->setParameter(self::TYPE_DEFINITION_PARAMETER, $typeDefinitions);
+        $container->setParameter(self::DOCTRINE_DBAL_TYPE_DEFINITION_PARAMETER, $typeDefinitions);
     }
 
     /**
