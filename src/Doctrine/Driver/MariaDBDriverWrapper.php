@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Artack\Id\Doctrine\Driver;
 
-use App\Doctrine\Platform\MariaDB1011Platform;
+use Artack\Id\Doctrine\Platform\MariaDB1011Platform;
 use Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\ServerVersionProvider;

@@ -9,9 +9,11 @@
         "doctrine/doctrine-bundle": "^2",
         "league/construct-finder": "^1.5",
         "symfony/framework-bundle": "^7",
-        "symfony/serializer": "^7",
         "symfony/uid": "^7",
         "webmozart/assert": "^1.11"
+    },
+    "suggest": {
+        "symfony/serializer": "^7 - Required if serializer.enable is set to true"
     },
     "require-dev": {
         "phpunit/phpunit": "^12"
