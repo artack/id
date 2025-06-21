@@ -1,0 +1,46 @@
+{
+    "name": "artack/id",
+    "description": "Working with value objects for ids in Symfony",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "8.3.*|8.4.*",
+        "doctrine/dbal": "^4",
+        "doctrine/doctrine-bundle": "^2",
+        "league/construct-finder": "^1.5",
+        "symfony/framework-bundle": "^7",
+        "symfony/serializer": "^7",
+        "symfony/uid": "^7",
+        "webmozart/assert": "^1.11"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Artack\\Id\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Artack\\Id\\": "tests/"
+        }
+    },
+    "scripts": {
+        "update:tools": "composer update -d tools/php-cs-fixer && composer update -d tools/phpstan",
+        "phpcs": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -vvv --diff --dry-run --allow-risky=yes --ansi",
+        "phpcs:fix": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -vvv --allow-risky=yes --ansi",
+        "phpstan": "tools/phpstan/vendor/bin/phpstan analyse -c phpstan.neon --ansi",
+        "test": [
+            "@phpstan",
+            "@phpcs"
+        ]
+    },
+    "scripts-descriptions": {
+        "phpcs": "Runs coding style test suite",
+        "phpstan": "Runs complete codebase static analysis"
+    }
+}
