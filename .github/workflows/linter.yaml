@@ -1,0 +1,58 @@
+name: linter
+
+concurrency:
+    group: linter
+    cancel-in-progress: true
+
+on:
+    push:
+    workflow_dispatch:
+
+jobs:
+    linter:
+        name: PHP on ${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.composer-flags }}
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php: ['8.3', '8.4']
+                stability: [prefer-lowest, prefer-stable]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php }}
+                  extensions: json,zip
+                  coverage: none
+                  tools: composer:v2
+
+            - name: Check PHP Version
+              run: php -v
+
+            - name: Install dependencies
+              run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress ${{ matrix.flags }}
+
+            - name: Run Unit tests with coverage
+              run: vendor/bin/phpunit --configuration ./phpunit.xml -- ${{ matrix.phpunit-flags }}
+
+            - name: Composer Validate
+              run: composer validate --strict
+              if: ${{ matrix.php == '8.4' && matrix.stability == 'prefer-stable'}}
+
+            - name: Install PHPStan
+              run: composer install --working-dir tools/phpstan --prefer-dist --no-progress --no-scripts --no-interaction
+              if: ${{ matrix.php == '8.4' && matrix.stability == 'prefer-stable'}}
+
+            - name: Run PHPStan
+              run: tools/phpstan/vendor/bin/phpstan analyse -c phpstan.neon --ansi
+              if: ${{ matrix.php == '8.4' && matrix.stability == 'prefer-stable'}}
+
+            - name: Install PHP-CS-Fixer
+              run: composer install --working-dir tools/php-cs-fixer --prefer-dist --no-progress --no-scripts --no-interaction
+              if: ${{ matrix.php == '8.3' && matrix.stability == 'prefer-stable'}}
+
+            - name: Run PHP-CS-Fixer
+              run: tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -vvv --diff --dry-run --allow-risky=yes --ansi
+              if: ${{ matrix.php == '8.3' && matrix.stability == 'prefer-stable'}}
