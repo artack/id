@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Artack\Id\Serializer;
 
 use Artack\Id\ValueObject\Id;
+use Override;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 final readonly class IdDenormalizer extends IdSupportedTypes implements DenormalizerInterface

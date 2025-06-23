@@ -28,21 +28,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Artack\\Id\\": "tests/"
+            "Artack\\Tests\\Id\\": "tests/"
         }
     },
     "scripts": {
-        "update:tools": "composer update -d tools/php-cs-fixer && composer update -d tools/phpstan",
-        "phpcs": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -vvv --diff --dry-run --allow-risky=yes --ansi",
-        "phpcs:fix": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -vvv --allow-risky=yes --ansi",
-        "phpstan": "tools/phpstan/vendor/bin/phpstan analyse -c phpstan.neon --ansi",
-        "test": [
-            "@phpstan",
-            "@phpcs"
-        ]
-    },
-    "scripts-descriptions": {
-        "phpcs": "Runs coding style test suite",
-        "phpstan": "Runs complete codebase static analysis"
+        "update:tools": "composer update -d tools/php-cs-fixer && composer update -d tools/phpstan"
     }
 }
