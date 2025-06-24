@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": "8.3.*|8.4.*",
-        "doctrine/dbal": "^4",
+        "doctrine/dbal": "^4.1",
         "doctrine/doctrine-bundle": "^2",
         "league/construct-finder": "^1.5",
         "symfony/framework-bundle": "^7",
