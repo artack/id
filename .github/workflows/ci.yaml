@@ -10,7 +10,6 @@ on:
 
 jobs:
     linter:
-#        name: PHP on ${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.composer-flags }}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
@@ -46,7 +45,7 @@ jobs:
               run: tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -vvv --diff --dry-run --allow-risky=yes --ansi
 
     test:
-        name: PHP on ${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.composer-flags }}
+        name: PHP on ${{ matrix.php }} - ${{ matrix.stability }}
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
