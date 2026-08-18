@@ -42,8 +42,11 @@ php84-cli:
 php85-cli:
 	docker compose run --rm php85 sh
 
+validation-composer-install-php83:
+	docker compose run --rm php83 composer update:tools
+
 validation-phpstan:
-	docker compose run --rm php84 ./tools/phpstan/vendor/bin/phpstan analyse -c phpstan.neon --ansi
+	docker compose run --rm php85 ./tools/phpstan/vendor/bin/phpstan analyse -c phpstan.neon --ansi
 
 validation-phpcs:
 	docker compose run --rm php83 ./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -vvv --diff --dry-run --allow-risky=yes --ansi

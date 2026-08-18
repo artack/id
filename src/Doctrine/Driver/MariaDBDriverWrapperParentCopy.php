@@ -20,10 +20,7 @@ trait MariaDBDriverWrapperParentCopy
                 $versionParts,
             )
         ) {
-            throw InvalidPlatformVersion::new(
-                $versionString,
-                '^(?:5\.5\.5-)?(mariadb-)?<major_version>.<minor_version>.<patch_version>',
-            );
+            throw InvalidPlatformVersion::new($versionString, '^(?:5\.5\.5-)?(mariadb-)?<major_version>.<minor_version>.<patch_version>');
         }
 
         return $versionParts['major'].'.'.$versionParts['minor'].'.'.$versionParts['patch'];

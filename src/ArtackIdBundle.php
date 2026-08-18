@@ -67,7 +67,7 @@ final class ArtackIdBundle extends AbstractBundle
     #[Override]
     public function configure(DefinitionConfigurator $definition): void
     {
-        $definition->rootNode() // @phpstan-ignore-line
+        $definition->rootNode()
             ->children()
             ->arrayNode(self::CONFIG_DOCTRINE_TYPE_DIRECTORIES_KEY)
             ->info('List of full file paths to directories to scan for Doctrine types')

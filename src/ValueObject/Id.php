@@ -8,7 +8,9 @@ use Symfony\Component\Uid\Uuid;
 
 abstract readonly class Id
 {
-    final public function __construct(public Uuid $uuid) {}
+    final public function __construct(
+        public Uuid $uuid,
+    ) {}
 
     final public function __toString(): string
     {

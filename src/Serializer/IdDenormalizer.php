@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 final readonly class IdDenormalizer extends IdSupportedTypes implements DenormalizerInterface
 {
     /**
-     * @param null|string      $data
+     * @param string|null      $data
      * @param class-string<Id> $type
      */
     #[Override]

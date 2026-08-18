@@ -9,7 +9,7 @@ use Artack\Id\ValueObject\Id;
 abstract readonly class IdSupportedTypes
 {
     /**
-     * @return array<string, null|bool>
+     * @return array<string, bool|null>
      */
     final public function getSupportedTypes(?string $format): array
     {
