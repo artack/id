@@ -5,22 +5,21 @@ declare(strict_types=1);
 namespace Artack\Tests\Id\ValueObject;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Uid\Uuid;
 
 final class IdTypeTest extends TestCase
 {
     private const string UUID_RFC4122 = '01890a5d-ac91-7d5a-bc39-37311668557b';
-    
+
     private ConcreteIdType $type;
-    private AbstractPlatform $platform;
+    private AbstractPlatform&Stub $platform;
     
     protected function setUp(): void
     {
         $this->type = new ConcreteIdType();
         
-        // Create a mock for AbstractPlatform
-        $this->platform = $this->createMock(AbstractPlatform::class);
+        $this->platform = $this->createStub(AbstractPlatform::class);
         $this->platform->method('getGuidTypeDeclarationSQL')
             ->willReturn('GUID_TYPE');
     }

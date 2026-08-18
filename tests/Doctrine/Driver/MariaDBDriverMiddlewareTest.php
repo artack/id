@@ -13,7 +13,7 @@ final class MariaDBDriverMiddlewareTest extends TestCase
 {
     public function testWrap(): void
     {
-        $driver = $this->createMock(Driver::class);
+        $driver = $this->createStub(Driver::class);
         $middleware = new MariaDBDriverMiddleware();
 
         $wrappedDriver = $middleware->wrap($driver);
