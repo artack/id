@@ -38,6 +38,10 @@ php83-cli:
 php84-cli:
 	docker compose run --rm php84 sh
 
+.PHONY: php-8.5-cli
+php85-cli:
+	docker compose run --rm php85 sh
+
 validation-phpstan:
 	docker compose run --rm php84 ./tools/phpstan/vendor/bin/phpstan analyse -c phpstan.neon --ansi
 
@@ -63,14 +67,25 @@ composer-install-php84-lowest:
 composer-install-php84-stable:
 	docker compose run --rm php84 composer update --prefer-stable --prefer-dist --no-interaction --no-progress
 
+composer-install-php85-lowest:
+	docker compose run --rm php85 composer update --prefer-lowest --prefer-dist --no-interaction --no-progress
+
+composer-install-php85-stable:
+	docker compose run --rm php85 composer update --prefer-stable --prefer-dist --no-interaction --no-progress
+
 test-phpunit-php83:
 	docker compose run --rm php83 ./vendor/bin/phpunit --configuration ./phpunit.xml
 
 test-phpunit-php84:
 	docker compose run --rm php84 ./vendor/bin/phpunit --configuration ./phpunit.xml
 
+test-phpunit-php85:
+	docker compose run --rm php85 ./vendor/bin/phpunit --configuration ./phpunit.xml
+
+test-php85-stable: composer-install-php85-stable test-phpunit-php85
 test-php84-stable: composer-install-php84-stable test-phpunit-php84
 test-php83-stable: composer-install-php83-stable test-phpunit-php83
+test-php85-lowest: composer-install-php85-lowest test-phpunit-php85
 test-php84-lowest: composer-install-php84-lowest test-phpunit-php84
 test-php83-lowest: composer-install-php83-lowest test-phpunit-php83
-test: test-php84-stable test-php83-stable test-php84-lowest test-php83-lowest
+test: test-php85-stable test-php84-stable test-php83-stable test-php85-lowest test-php84-lowest test-php83-lowest
